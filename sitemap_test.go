@@ -1,75 +1,48 @@
 package sitemap
 
 import (
-	"encoding/xml"
-	"io"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/antchfx/xmlquery"
 	"github.com/stretchr/testify/assert"
 )
 
-func checkTagExists(src string, tags ...string) (bool, error) {
-	decoder := xml.NewDecoder(strings.NewReader(src))
+const (
+	testDefaultXML       string = `<xml version="1.0" encoding="UTF-8"><urlset></urlset></xml>`
+	testDefaultPrettyXML string = "<xml version=\"1.0\" encoding=\"UTF-8\">\nXXXXX<urlset></urlset>\n</xml>"
+)
 
-	for {
-		t, err := decoder.Token()
-		if err != nil {
-			if err == io.EOF {
-				return false, nil
-			}
-			return false, err
-		}
-		if se, ok := t.(xml.StartElement); ok {
-			if se.Name.Local == tags[0] {
-				// Keep checking nested tags
-				if len(tags) > 1 {
-					return checkTagExists(src, tags[1:]...)
-				}
-
-				return true, nil
-			}
-		}
+func getTag(str string, tags string) (*xmlquery.Node, error) {
+	doc, err := xmlquery.Parse(strings.NewReader(str))
+	if err != nil {
+		return nil, err
 	}
-}
 
-// func getTagCharData(src string) (string, error) {
-// 	decoder := xml.NewDecoder(strings.NewReader(src))
-// 	for {
-// 		t, err := decoder.Token()
-// 		if err != nil {
-// 			if err == io.EOF {
-// 				return "", nil
-// 			}
-// 			return "", err
+	tag := xmlquery.FindOne(doc, tags)
+	if tag != nil {
+		return tag, nil
+	}
 
-// 		}
-
-// 		if se, ok := t.(xml.CharData); ok {
-// 			// println(src)
-// 			// fmt.Printf(`value %v+`, se)
-
-// 			return string(se), nil
-// 		}
-// 	}
-// }
-
-func TestXMLErrorHandling(t *testing.T) {
-	// TODO: This test should assess whether an error is returned properly.
-	// xml := New()
-	// TODO: Test .Output return of error
-	// TODO: Test .OutputString returns empty string.
+	return nil, fmt.Errorf(`Failed to find %s`, tags)
 }
 
 func TestDefaults(t *testing.T) {
 	xml := New()
 
-	out := xml.OutputString()
+	out, _ := xml.OutputString()
 
-	assert.Equal(t, `<xml version="1.0" encoding="UTF-8">
-   <urlset></urlset>
-</xml>`, out, "Should output default empty XML")
+	assert.Equal(t, testDefaultXML, out, "Should output default empty XML")
+}
+
+func TestPrettyOutput(t *testing.T) {
+	xml := New()
+
+	out, _ := xml.OutputPrettyString("", "XXXXX")
+
+	assert.Equal(t, testDefaultPrettyXML, out, "Should output prettified XML")
 }
 
 func TestXMLAddDefaultUrl(t *testing.T) {
@@ -78,12 +51,12 @@ func TestXMLAddDefaultUrl(t *testing.T) {
 
 	xml.AddUrl(url)
 
-	out := xml.OutputString()
+	out, _ := xml.OutputString()
 
-	locExists, _ := checkTagExists(out, "urlset", "url", "loc")
-	assert.False(t, locExists, "Should have urlset, nested url nodes but without location")
-	lastModExists, _ := checkTagExists(out, "urlset", "url", "lastmod")
-	assert.True(t, lastModExists, "Should have default last modified")
+	tag, _ := getTag(out, "//urlset/url/loc")
+	assert.True(t, tag == nil, "Should have urlset, nested url nodes but without location")
+	lastModTag, _ := getTag(out, "//urlset/url/lastmod")
+	assert.True(t, lastModTag != nil, "Should have default last modified")
 }
 
 func TestXMLAddUrlWithLocation(t *testing.T) {
@@ -93,9 +66,9 @@ func TestXMLAddUrlWithLocation(t *testing.T) {
 	url.SetLocation("https://domain.com")
 	xml.AddUrl(url)
 
-	out := xml.OutputString()
-	exists, _ := checkTagExists(out, "urlset", "url", "loc")
-	assert.True(t, exists, "Should have urlset,nested url nodes, and a location field")
+	out, _ := xml.OutputString()
+	tag, _ := getTag(out, "//urlset/url/loc")
+	assert.True(t, tag != nil, "Should have urlset,nested url nodes, and a location field")
 }
 
 func TestXMLAddUrlWithLastModified(t *testing.T) {
@@ -107,13 +80,11 @@ func TestXMLAddUrlWithLastModified(t *testing.T) {
 	url.SetLastModified(later)
 	xml.AddUrl(url)
 
-	out := xml.OutputString()
-	exists, _ := checkTagExists(out, "urlset", "url", "lastmod")
+	out, _ := xml.OutputString()
 
-	assert.True(t, exists, "Should have lastmod set")
+	tag, _ := getTag(out, "//urlset/url/lastmod")
+	assert.True(t, tag != nil, "Should have lastmod set")
 
-	// value, _ := getTagCharData(src)
-	// fmt.Println(value)
-	// fmt.Println(out)
-	// t.Error("Failed")
+	nodeTime, _ := time.Parse(time.RFC3339, tag.InnerText())
+	assert.Equal(t, nodeTime, later.UTC(), "Should match input timestamp")
 }
