@@ -5,3 +5,17 @@
 [![Coverage](https://gocover.io/_badge/github.com/mingard/sitemap-format)](https://gocover.io/github.com/mingard/sitemap-format)
 
 Simple sitemap formatting, with a little syntactic sugar.
+
+## Install
+
+```sh
+go get github.com/mingard/sitemap-format
+```
+
+## Usage
+
+```go
+
+// Examples to come
+
+```
