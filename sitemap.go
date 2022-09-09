@@ -2,7 +2,6 @@ package sitemap
 
 import (
 	"encoding/xml"
-	"fmt"
 )
 
 const (
@@ -25,7 +24,6 @@ func (x *XML) AddUrl(u *Url) {
 
 // Output returns the output value as bytes
 func (x *XML) Output() ([]byte, error) {
-	fmt.Println(len(x.UrlSet))
 	return xml.MarshalIndent(x, "", "   ")
 }
 
