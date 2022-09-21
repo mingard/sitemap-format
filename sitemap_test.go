@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	testDefaultXML       string = `<xml xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" version="1.0" encoding="UTF-8"><urlset></urlset></xml>`
-	testDefaultPrettyXML string = "<xml xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" version=\"1.0\" encoding=\"UTF-8\">\nXXXXX<urlset></urlset>\n</xml>"
+	testDefaultXML       string = `<xml version="1.0" encoding="UTF-8"><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset></xml>`
+	testDefaultPrettyXML string = "<xml version=\"1.0\" encoding=\"UTF-8\">\nXXXXX<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"></urlset>\n</xml>"
 )
 
 func getDoc(str string) (*xmlquery.Node, error) {
@@ -93,8 +93,8 @@ func TestDefaultType(t *testing.T) {
 	xml := New()
 
 	out, _ := xml.OutputString()
-	doc, _ := findOne(out, "//.")
-	assert.Equal(t, doc.Attr[0].Name.Local, "xmlns", "Should contain correct default type")
+	doc, _ := findOne(out, "//urlset/@xmlns")
+	assert.Equal(t, doc.InnerText(), TypeDefault.Value, "Should contain correct default type")
 }
 
 func TestSetType(t *testing.T) {
@@ -102,9 +102,8 @@ func TestSetType(t *testing.T) {
 
 	xml.SetType(TypeNews)
 	out, _ := xml.OutputString()
-	doc, _ := findOne(out, "//.")
-	assert.Equal(t, doc.Attr[1].Name.Local, "news", "Should contain correct type")
-	// t.Error("False neg")
+	doc, _ := findOne(out, "//urlset/@xmlns:news")
+	assert.Equal(t, doc.InnerText(), TypeNews.Value, "Should contain correct type")
 }
 
 func TestXMLAddUrlWithLastModified(t *testing.T) {

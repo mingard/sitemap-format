@@ -13,11 +13,10 @@ const (
 
 // SitemapXML is the top level XML node for the sitemap
 type SitemapXML struct {
-	XMLName      xml.Name    `xml:"xml"`
-	Attributes   []*xml.Attr `xml:",attr,omitempty"`
-	UrlSet       []*Url      `xml:"urlset>url,omitempty"`
-	Version      string      `xml:"version,attr,omitempty"`
-	Encoding     string      `xml:"encoding,attr,omitempty"`
+	XMLName      xml.Name  `xml:"xml"`
+	UrlSet       []*UrlSet `xml:"urlset,omitempty"`
+	Version      string    `xml:"version,attr,omitempty"`
+	Encoding     string    `xml:"encoding,attr,omitempty"`
 	pretty       bool
 	outputPrefix string
 	outputIndent string
@@ -25,11 +24,13 @@ type SitemapXML struct {
 
 // AddUrl inserts a URL node into the XML's UrlSet node.
 func (s *SitemapXML) AddUrl(u *Url) {
-	s.UrlSet = append(s.UrlSet, u)
+	s.addDefaultUrlSet()
+	s.UrlSet[0].AddUrl(u)
 }
 
 // Output returns the output value as bytes
 func (s *SitemapXML) Output() ([]byte, error) {
+	s.addDefaultUrlSet()
 	if s.pretty {
 		return xml.MarshalIndent(s, s.outputPrefix, s.outputIndent)
 	}
@@ -49,8 +50,10 @@ func (s *SitemapXML) OutputString() (string, error) {
 	return string(out), err
 }
 
+// SetType sets the urlset type and creates a default urlset if necessary.
 func (s *SitemapXML) SetType(t *xml.Attr) {
-	s.Attributes = append(s.Attributes, t)
+	s.addDefaultUrlSet()
+	s.UrlSet[0].SetType(t)
 }
 
 // OutputPrettyString returns the output as a string with prettified rules. Empty if there's an error.
@@ -60,14 +63,21 @@ func (s *SitemapXML) OutputPrettyString(prefix, indent string) (string, error) {
 	return string(out), err
 }
 
+func (s *SitemapXML) addDefaultUrlSet() {
+	if len(s.UrlSet) == 0 {
+		urlSet := NewUrlSet()
+		s.UrlSet = append(s.UrlSet, urlSet)
+	}
+}
+
 // defaultXML creates a default xml entity with required values.
 func defaultXML() *SitemapXML {
 	return &SitemapXML{
+		UrlSet:       make([]*UrlSet, 0),
 		Version:      defaultVersion,
 		Encoding:     defaultEncoding,
 		outputPrefix: defaultOutputPrefix,
 		outputIndent: defaultOutputIndent,
-		Attributes:   []*xml.Attr{TypeDefault},
 	}
 }
 
