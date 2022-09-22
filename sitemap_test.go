@@ -19,19 +19,19 @@ func getDoc(str string) (*xmlquery.Node, error) {
 	return xmlquery.Parse(strings.NewReader(str))
 }
 
-func find(str, search string) ([]*xmlquery.Node, error) {
-	doc, err := getDoc(str)
-	if err != nil {
-		return nil, err
-	}
+// func find(str, search string) ([]*xmlquery.Node, error) {
+// 	doc, err := getDoc(str)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	tags := xmlquery.Find(doc, search)
-	if len(tags) == 0 {
-		return tags, nil
-	}
+// 	tags := xmlquery.Find(doc, search)
+// 	if len(tags) == 0 {
+// 		return tags, nil
+// 	}
 
-	return nil, fmt.Errorf(`Failed to find %s`, search)
-}
+// 	return nil, fmt.Errorf(`Failed to find %s`, search)
+// }
 
 func findOne(str, tags string) (*xmlquery.Node, error) {
 	doc, err := getDoc(str)
