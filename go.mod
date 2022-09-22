@@ -1,6 +1,6 @@
 module github.com/mingard/sitemap-format
 
-go 1.18
+go 1.17
 
 require (
 	github.com/antchfx/xmlquery v1.3.12
