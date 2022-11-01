@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// News stores news entry data.
 type News struct {
 	XMLName         xml.Name         `xml:"news:news"`
 	Publication     *NewsPublication `xml:"news:publication"`
@@ -33,6 +34,7 @@ func (n *News) SetLanguage(l Lang) *News {
 	return n
 }
 
+// NewsPublication is the publication sub-component to News.
 type NewsPublication struct {
 	XMLName      xml.Name `xml:"news:publication"`
 	NewsName     string   `xml:"news:name,omitempty"`
