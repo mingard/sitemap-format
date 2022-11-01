@@ -11,27 +11,14 @@ import (
 )
 
 const (
-	testDefaultXML       string = `<xml version="1.0" encoding="UTF-8"><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset></xml>`
-	testDefaultPrettyXML string = "<xml version=\"1.0\" encoding=\"UTF-8\">\nXXXXX<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"></urlset>\n</xml>"
+	testDefaultXML string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`
+	// testDefaultPrettyXML string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\nXXXXX<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"></urlset>\n"
+	testDefaultPrettyXML string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\nXXXXX<url>\nXXXXXXXXXX<lastmod>2021-08-15T14:30:45.0000001Z</lastmod>\nXXXXX</url>\n</urlset>"
 )
 
 func getDoc(str string) (*xmlquery.Node, error) {
 	return xmlquery.Parse(strings.NewReader(str))
 }
-
-// func find(str, search string) ([]*xmlquery.Node, error) {
-// 	doc, err := getDoc(str)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	tags := xmlquery.Find(doc, search)
-// 	if len(tags) == 0 {
-// 		return tags, nil
-// 	}
-
-// 	return nil, fmt.Errorf(`Failed to find %s`, search)
-// }
 
 func findOne(str, tags string) (*xmlquery.Node, error) {
 	doc, err := getDoc(str)
@@ -57,6 +44,11 @@ func TestDefaults(t *testing.T) {
 
 func TestPrettyOutput(t *testing.T) {
 	xml := New()
+
+	url := NewUrl()
+	fixedTime := time.Date(2021, 8, 15, 14, 30, 45, 100, time.UTC)
+	url.SetLastModified(fixedTime)
+	xml.AddUrl(url)
 
 	out, _ := xml.OutputPrettyString("", "XXXXX")
 

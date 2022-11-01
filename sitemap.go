@@ -2,6 +2,7 @@ package sitemap
 
 import (
 	"encoding/xml"
+	"fmt"
 )
 
 const (
@@ -13,10 +14,7 @@ const (
 
 // SitemapXML is the top level XML node for the sitemap
 type SitemapXML struct {
-	XMLName      xml.Name  `xml:"xml"`
 	UrlSet       []*UrlSet `xml:"urlset,omitempty"`
-	Version      string    `xml:"version,attr,omitempty"`
-	Encoding     string    `xml:"encoding,attr,omitempty"`
 	pretty       bool
 	outputPrefix string
 	outputIndent string
@@ -28,13 +26,31 @@ func (s *SitemapXML) AddUrl(u *Url) {
 	s.UrlSet[0].AddUrl(u)
 }
 
+// SetType sets the urlset type and creates a default urlset if necessary.
+func (s *SitemapXML) SetType(t *xml.Attr) {
+	s.addDefaultUrlSet()
+	s.UrlSet[0].SetType(t)
+}
+
 // Output returns the output value as bytes
 func (s *SitemapXML) Output() ([]byte, error) {
 	s.addDefaultUrlSet()
+
+	out := []byte(s.headerString())
+	var err error
+	var marshalledXML []byte
+
 	if s.pretty {
-		return xml.MarshalIndent(s, s.outputPrefix, s.outputIndent)
+		marshalledXML, err = xml.MarshalIndent(s.UrlSet, s.outputPrefix, s.outputIndent)
+	} else {
+		marshalledXML, err = xml.Marshal(s.UrlSet)
 	}
-	return xml.Marshal(s)
+
+	if err == nil {
+		out = append(out, marshalledXML...)
+	}
+
+	return out, err
 }
 
 // Pretty sets the output to use a prettified format.
@@ -50,17 +66,10 @@ func (s *SitemapXML) OutputString() (string, error) {
 	return string(out), err
 }
 
-// SetType sets the urlset type and creates a default urlset if necessary.
-func (s *SitemapXML) SetType(t *xml.Attr) {
-	s.addDefaultUrlSet()
-	s.UrlSet[0].SetType(t)
-}
-
 // OutputPrettyString returns the output as a string with prettified rules. Empty if there's an error.
 func (s *SitemapXML) OutputPrettyString(prefix, indent string) (string, error) {
 	s.PrettyFormat(prefix, indent)
-	out, err := s.Output()
-	return string(out), err
+	return s.OutputString()
 }
 
 func (s *SitemapXML) addDefaultUrlSet() {
@@ -70,12 +79,19 @@ func (s *SitemapXML) addDefaultUrlSet() {
 	}
 }
 
+// headerString outputs the XML header string
+func (s *SitemapXML) headerString() string {
+	xmlHeader := fmt.Sprintf(`<?xml version="%s" encoding="%s"?>`, defaultVersion, defaultEncoding)
+	if s.pretty {
+		return xmlHeader + "\n"
+	}
+	return xmlHeader
+}
+
 // defaultXML creates a default xml entity with required values.
 func defaultXML() *SitemapXML {
 	return &SitemapXML{
 		UrlSet:       make([]*UrlSet, 0),
-		Version:      defaultVersion,
-		Encoding:     defaultEncoding,
 		outputPrefix: defaultOutputPrefix,
 		outputIndent: defaultOutputIndent,
 	}

@@ -3,6 +3,7 @@ package sitemap
 import "encoding/xml"
 
 type UrlSet struct {
+	XMLName    xml.Name    `xml:"urlset"`
 	Attributes []*xml.Attr `xml:",attr,omitempty"`
 	Url        []*Url      `xml:"url,omitempty"`
 }
