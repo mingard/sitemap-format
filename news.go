@@ -10,6 +10,7 @@ import (
 // News stores news entry data.
 type News struct {
 	XMLName         xml.Name     `xml:"news:news"`
+	Name            string       `xml:"news:name"`
 	Publication     *Publication `xml:"news:publication"`
 	PublicationDate time.Time    `xml:"news:publication_date"`
 	Title           string       `xml:"news:title"`
@@ -18,6 +19,12 @@ type News struct {
 // SetTitle sets the news extensions title parameter.
 func (n *News) SetTitle(t string) *News {
 	n.Title = t
+	return n
+}
+
+// SetName sets the news extensions name parameter.
+func (n *News) SetName(na string) *News {
+	n.Name = na
 	return n
 }
 
