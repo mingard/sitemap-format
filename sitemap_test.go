@@ -85,16 +85,16 @@ func TestDefaultType(t *testing.T) {
 
 	out, _ := xml.OutputString()
 	doc, _ := findOne(out, "//urlset/@xmlns")
-	assert.Equal(t, doc.InnerText(), TypeDefault.Value, "Should contain correct default type")
+	assert.Equal(t, doc.InnerText(), XMLNSDefault.Value, "Should contain correct default type")
 }
 
 func TestSetType(t *testing.T) {
 	xml := New()
 
-	xml.SetType(TypeNews)
+	xml.SetType(XMLNSNews)
 	out, _ := xml.OutputString()
 	doc, _ := findOne(out, "//urlset/@xmlns:news")
-	assert.Equal(t, doc.InnerText(), TypeNews.Value, "Should contain correct type")
+	assert.Equal(t, doc.InnerText(), XMLNSNews.Value, "Should contain correct type")
 }
 
 func TestXMLAddUrlWithLastModified(t *testing.T) {

@@ -21,7 +21,7 @@ func (u *UrlSet) AddUrl(url *Url) {
 // defaultUrlSet creates a default urlset entity with required values.
 func defaultUrlSet() *UrlSet {
 	return &UrlSet{
-		Attributes: []*xml.Attr{TypeDefault},
+		Attributes: []*xml.Attr{XMLNSDefault},
 		Url:        make([]*Url, 0),
 	}
 }
