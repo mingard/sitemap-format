@@ -13,8 +13,8 @@ type Url struct {
 	Priority         string    `xml:"priority,omitempty"`
 	LastModifiedDate time.Time `xml:"lastmod,omitempty"`
 	News             *News     `xml:"news:news,omitempty"`
-	Image            []*Image  `xml:"image:image,omitempty"`
-	Video            []*Video  `xml:"video:video,omitempty"`
+	Images           []*Image  `xml:"image:image,omitempty"`
+	Videos           []*Video  `xml:"video:video,omitempty"`
 }
 
 // SetLocation sets the url's location parameter
@@ -29,12 +29,30 @@ func (u *Url) SetLastModified(t time.Time) *Url {
 	return u
 }
 
+// SetNews sets the news value.
+func (u *Url) SetNews(n *News) *Url {
+	u.News = n
+	return u
+}
+
+// AddImage adds one or more image block value.
+func (u *Url) AddImage(i ...*Image) *Url {
+	u.Images = append(u.Images, i...)
+	return u
+}
+
+// AddVideo adds one or more video block value.
+func (u *Url) AddVideo(v ...*Video) *Url {
+	u.Videos = append(u.Videos, v...)
+	return u
+}
+
 // defaultUrl creates a default url entity with required values.
 func defaultUrl() *Url {
 	now := time.Now()
 	url := &Url{
-		Image: make([]*Image, 0),
-		Video: make([]*Video, 0),
+		Images: make([]*Image, 0),
+		Videos: make([]*Video, 0),
 	}
 	return url.SetLastModified(now)
 }
