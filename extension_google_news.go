@@ -9,15 +9,15 @@ import (
 
 // News stores news entry data.
 type News struct {
-	XMLName         xml.Name         `xml:"news:news"`
-	Publication     *NewsPublication `xml:"news:publication"`
-	PublicationDate time.Time        `xml:"news:publication_date"`
-	NewsTitle       string           `xml:"news:title"`
+	XMLName         xml.Name     `xml:"news:news"`
+	Publication     *Publication `xml:"news:publication"`
+	PublicationDate time.Time    `xml:"news:publication_date"`
+	Title           string       `xml:"news:title"`
 }
 
 // SetTitle sets the news extensions title parameter.
 func (n *News) SetTitle(t string) *News {
-	n.NewsTitle = t
+	n.Title = t
 	return n
 }
 
@@ -34,25 +34,25 @@ func (n *News) SetLanguage(l Lang) *News {
 	return n
 }
 
-// NewsPublication is the publication sub-component to News.
-type NewsPublication struct {
+// Publication is the news publication sub-component to News.
+type Publication struct {
 	XMLName      xml.Name `xml:"news:publication"`
 	NewsName     string   `xml:"news:name,omitempty"`
 	NewsLanguage Lang     `xml:"news:language,omitempty"`
 }
 
-// defaultNewsExtension creates a default news extension entity with required values.
-func defaultNewsExtension() *News {
+// defaultNews creates a default news extension entity with required values.
+func defaultNews() *News {
 	now := time.Now()
 	n := &News{
-		Publication: &NewsPublication{
+		Publication: &Publication{
 			NewsLanguage: LanguageDefault,
 		},
 	}
 	return n.SetPublicationDate(now)
 }
 
-// NewNewsExtension returns a new instance of the default NewsExtension.
-func NewNewsExtension() *News {
-	return defaultNewsExtension()
+// NewNews returns a new instance of the default News extension.
+func NewNews() *News {
+	return defaultNews()
 }
