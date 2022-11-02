@@ -2,102 +2,36 @@ package sitemap
 
 import (
 	"encoding/xml"
-	"fmt"
+	"time"
 )
 
-const (
-	defaultVersion      string = "1.0"
-	defaultEncoding     string = "UTF-8"
-	defaultOutputPrefix string = ""
-	defaultOutputIndent string = "   "
-)
-
-// SitemapXML is the top level XML node for the sitemap
-type SitemapXML struct {
-	UrlSet       []*UrlSet `xml:"urlset,omitempty"`
-	pretty       bool
-	outputPrefix string
-	outputIndent string
+// Sitemap is a sitemap block to be nested under SitemapIndex.
+type Sitemap struct {
+	XMLName          xml.Name  `xml:"sitemap,omitempty"`
+	Location         string    `xml:"loc,omitempty"`
+	LastModifiedDate time.Time `xml:"lastmod,omitempty"`
 }
 
-// AddUrl inserts a URL node into the XML's UrlSet node.
-func (s *SitemapXML) AddUrl(u *Url) {
-	s.addDefaultUrlSet()
-	s.UrlSet[0].AddUrl(u)
+// SetLocation sets the sitemap's location parameter
+func (s *Sitemap) SetLocation(l string) *Sitemap {
+	s.Location = l
+	return s
 }
 
-// SetType sets the urlset type and creates a default urlset if necessary.
-func (s *SitemapXML) SetType(t *xml.Attr) {
-	s.addDefaultUrlSet()
-	s.UrlSet[0].SetType(t)
+// SetLastModified sets the value of the modified date field.
+func (s *Sitemap) SetLastModified(t time.Time) *Sitemap {
+	s.LastModifiedDate = t.UTC()
+	return s
 }
 
-// Output returns the output value as bytes
-func (s *SitemapXML) Output() ([]byte, error) {
-	s.addDefaultUrlSet()
-
-	out := []byte(s.headerString())
-	var err error
-	var marshalledXML []byte
-
-	if s.pretty {
-		marshalledXML, err = xml.MarshalIndent(s.UrlSet, s.outputPrefix, s.outputIndent)
-	} else {
-		marshalledXML, err = xml.Marshal(s.UrlSet)
-	}
-
-	if err == nil {
-		out = append(out, marshalledXML...)
-	}
-
-	return out, err
+// defaultSitemap creates a default sitemap entity with required values.
+func defaultSitemap() *Sitemap {
+	now := time.Now()
+	sitemap := new(Sitemap)
+	return sitemap.SetLastModified(now)
 }
 
-// Pretty sets the output to use a prettified format.
-func (s *SitemapXML) PrettyFormat(prefix, indent string) {
-	s.pretty = true
-	s.outputPrefix = prefix
-	s.outputIndent = indent
-}
-
-// OutputString returns the output as a string. Empty if there's an error.
-func (s *SitemapXML) OutputString() (string, error) {
-	out, err := s.Output()
-	return string(out), err
-}
-
-// OutputPrettyString returns the output as a string with prettified rules. Empty if there's an error.
-func (s *SitemapXML) OutputPrettyString(prefix, indent string) (string, error) {
-	s.PrettyFormat(prefix, indent)
-	return s.OutputString()
-}
-
-func (s *SitemapXML) addDefaultUrlSet() {
-	if len(s.UrlSet) == 0 {
-		urlSet := NewUrlSet()
-		s.UrlSet = append(s.UrlSet, urlSet)
-	}
-}
-
-// headerString outputs the XML header string
-func (s *SitemapXML) headerString() string {
-	xmlHeader := fmt.Sprintf(`<?xml version="%s" encoding="%s"?>`, defaultVersion, defaultEncoding)
-	if s.pretty {
-		return xmlHeader + "\n"
-	}
-	return xmlHeader
-}
-
-// defaultXML creates a default xml entity with required values.
-func defaultXML() *SitemapXML {
-	return &SitemapXML{
-		UrlSet:       make([]*UrlSet, 0),
-		outputPrefix: defaultOutputPrefix,
-		outputIndent: defaultOutputIndent,
-	}
-}
-
-// New returns a new instance of the default XML.
-func New() *SitemapXML {
-	return defaultXML()
+// NewSitemap returns a new instance of the default sitemap.
+func NewSitemap() *Sitemap {
+	return defaultSitemap()
 }

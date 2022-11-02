@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	testDefaultXML       string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`
+	testDefaultXML       string = `<?xml version="1.0" encoding="UTF-8"?>`
 	testDefaultPrettyXML string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\nXXXXX<url>\nXXXXXXXXXX<lastmod>2021-08-15T14:30:45.0000001Z</lastmod>\nXXXXX</url>\n</urlset>"
 )
 

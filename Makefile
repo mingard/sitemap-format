@@ -5,7 +5,7 @@
 #
 USER=mingard
 PACKAGE=sitemap-format
-VERSION=1.0.1
+VERSION=1.1.0
 
 # Go command variables
 GOCMD=go
