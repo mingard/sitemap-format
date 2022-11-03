@@ -13,25 +13,29 @@ type Sitemap struct {
 }
 
 // SetLocation sets the sitemap's location parameter
-func (s *Sitemap) SetLocation(l string) *Sitemap {
+func (s *Sitemap) SetLocation(l string) {
 	s.Location = l
-	return s
 }
 
 // SetLastModified sets the value of the modified date field.
-func (s *Sitemap) SetLastModified(t time.Time) *Sitemap {
+func (s *Sitemap) SetLastModified(t time.Time) {
 	s.LastModifiedDate = t.UTC()
-	return s
 }
 
+// Defaults
+func (s *Sitemap) SetNews(n *News)      {}
+func (s *Sitemap) AddImage(i ...*Image) {}
+func (s *Sitemap) AddVideo(v ...*Video) {}
+
 // defaultSitemap creates a default sitemap entity with required values.
-func defaultSitemap() *Sitemap {
+func defaultSitemap() ChildNode {
 	now := time.Now()
 	sitemap := new(Sitemap)
-	return sitemap.SetLastModified(now)
+	sitemap.SetLastModified(now)
+	return sitemap
 }
 
 // NewSitemap returns a new instance of the default sitemap.
-func NewSitemap() *Sitemap {
+func NewSitemap() ChildNode {
 	return defaultSitemap()
 }

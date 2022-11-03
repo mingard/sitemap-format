@@ -18,46 +18,42 @@ type Url struct {
 }
 
 // SetLocation sets the url's location parameter
-func (u *Url) SetLocation(l string) *Url {
+func (u *Url) SetLocation(l string) {
 	u.Location = l
-	return u
 }
 
 // SetLastModified sets the value of the modified date field.
-func (u *Url) SetLastModified(t time.Time) *Url {
+func (u *Url) SetLastModified(t time.Time) {
 	u.LastModifiedDate = t.UTC()
-	return u
 }
 
 // SetNews sets the news value.
-func (u *Url) SetNews(n *News) *Url {
+func (u *Url) SetNews(n *News) {
 	u.News = n
-	return u
 }
 
 // AddImage adds one or more image block value.
-func (u *Url) AddImage(i ...*Image) *Url {
+func (u *Url) AddImage(i ...*Image) {
 	u.Images = append(u.Images, i...)
-	return u
 }
 
 // AddVideo adds one or more video block value.
-func (u *Url) AddVideo(v ...*Video) *Url {
+func (u *Url) AddVideo(v ...*Video) {
 	u.Videos = append(u.Videos, v...)
-	return u
 }
 
 // defaultUrl creates a default url entity with required values.
-func defaultUrl() *Url {
+func defaultUrl() ChildNode {
 	now := time.Now()
 	url := &Url{
 		Images: make([]*Image, 0),
 		Videos: make([]*Video, 0),
 	}
-	return url.SetLastModified(now)
+	url.SetLastModified(now)
+	return url
 }
 
 // NewUrl returns a new instance of the default URL.
-func NewUrl() *Url {
+func NewUrl() ChildNode {
 	return defaultUrl()
 }

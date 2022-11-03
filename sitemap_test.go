@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	testDefaultXML       string = `<?xml version="1.0" encoding="UTF-8"?>`
-	testDefaultPrettyXML string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\nXXXXX<url>\nXXXXXXXXXX<lastmod>2021-08-15T14:30:45.0000001Z</lastmod>\nXXXXX</url>\n</urlset>"
+	testDefaultXML             string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`
+	testDefaultSitemapIndexXML string = `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>`
+	testDefaultPrettyXML       string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\nXXXXX<url>\nXXXXXXXXXX<lastmod>2021-08-15T14:30:45.0000001Z</lastmod>\nXXXXX</url>\n</urlset>"
 )
 
 func getDoc(str string) (*xmlquery.Node, error) {
@@ -41,13 +42,21 @@ func TestDefaults(t *testing.T) {
 	assert.Equal(t, testDefaultXML, out, "Should output default empty XML")
 }
 
+func TestNewSitemapIndex(t *testing.T) {
+	xml := NewSitemapIndex()
+
+	out, _ := xml.OutputString()
+
+	assert.Equal(t, testDefaultSitemapIndexXML, out, "Should output default empty XML")
+}
+
 func TestPrettyOutput(t *testing.T) {
 	xml := New()
 
 	url := NewUrl()
 	fixedTime := time.Date(2021, 8, 15, 14, 30, 45, 100, time.UTC)
 	url.SetLastModified(fixedTime)
-	xml.AddUrl(url)
+	xml.AddEntry(url)
 
 	out, _ := xml.OutputPrettyString("", "XXXXX")
 
@@ -58,7 +67,7 @@ func TestXMLAddDefaultUrl(t *testing.T) {
 	xml := New()
 	url := NewUrl()
 
-	xml.AddUrl(url)
+	xml.AddEntry(url)
 
 	out, _ := xml.OutputString()
 
@@ -68,12 +77,12 @@ func TestXMLAddDefaultUrl(t *testing.T) {
 	assert.True(t, lastModTag != nil, "Should have default last modified")
 }
 
-func TestXMLAddUrlWithLocation(t *testing.T) {
+func TestXMLAddEntryWithLocation(t *testing.T) {
 	xml := New()
 	url := NewUrl()
 
 	url.SetLocation("https://domain.com")
-	xml.AddUrl(url)
+	xml.AddEntry(url)
 
 	out, _ := xml.OutputString()
 	tag, _ := findOne(out, "//urlset/url/loc")
@@ -97,14 +106,14 @@ func TestSetType(t *testing.T) {
 	assert.Equal(t, doc.InnerText(), XMLNSNews.Value, "Should contain correct type")
 }
 
-func TestXMLAddUrlWithLastModified(t *testing.T) {
+func TestXMLAddEntryWithLastModified(t *testing.T) {
 	xml := New()
 	url := NewUrl()
 
 	now := time.Now()
 	later := now.Add(3 * time.Hour)
 	url.SetLastModified(later)
-	xml.AddUrl(url)
+	xml.AddEntry(url)
 
 	out, _ := xml.OutputString()
 
