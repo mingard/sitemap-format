@@ -6,7 +6,7 @@
 
 Simple sitemap formatting, with a little syntactic sugar.
 
-## Install
+## Installation
 
 ```sh
 go get github.com/mingard/sitemap-format
@@ -14,8 +14,18 @@ go get github.com/mingard/sitemap-format
 
 ## Usage
 
-```go
+### Basic Sitemap
 
-// Examples to come
+```go
+xml := sitemap.New()
+
+url := sitemap.NewUrl()
+url.SetLocation("https://domain.com")
+xml.AddEntry(url)
+
+out, _ := xml.OutputString()
+fmt.Println(out)
+// Output
+// <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://domain.com</loc><lastmod>2022-11-03T11:56:00.26065Z</lastmod></url></urlset>
 
 ```
