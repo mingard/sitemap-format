@@ -44,7 +44,7 @@ type Video struct {
 	XMLName xml.Name `xml:"video:video"`
 
 	// Required
-	
+
 	// Title HTML entities must be escaped or wrapped in a CDATA block.
 	Title string `xml:"video:title"`
 	// Description Maximum {{MaxDescriptionLength}} characters. All HTML entities must be escaped or wrapped in a CDATA block. It must match the description displayed on the web page (it doesn't need to be a word-for-word match).
@@ -54,16 +54,16 @@ type Video struct {
 	ContentLoc string `xml:"video:content_loc,omitempty"`
 	// Can be used instead of or alongside ContentLoc.
 	PlayerLoc string `xml:"video:player_loc,omitempty"`
-	
+
 	// Recommended
-	
+
 	// Duration value must be from {{DurationMin}} to {{DurationMax}} inclusive.
 	Duration int `xml:"video:duration,omitempty"`
 	// ExpirationDate format either YYYY-MM-DD or YYYY-MM-DDThh:mm:ss+TZD
 	ExpirationDate time.Time `xml:"video:expiration_date,omitempty"`
-	
+
 	// Optional
-	
+
 	// Rating values are float numbers in the range {{RatingLow}} (low) to {{RatingHigh}} (high), inclusive.
 	Rating          float32   `xml:"video:rating,omitempty"`
 	ViewCount       int       `xml:"video:view_count,omitempty"`
@@ -179,7 +179,7 @@ func (v *Video) DenyCountries(c string) *Video {
 	return v
 }
 
-// addPlatform creates a platform restruction block.
+// addPlatform creates a platform restriction block.
 func (v *Video) addPlatform(r *xml.Attr, p ...PlatformName) {
 	// Convert platforms to string
 	platforms := make([]string, 0)
