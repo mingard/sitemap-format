@@ -14,18 +14,23 @@ go get github.com/mingard/sitemap-format
 
 ## Usage
 
-### Basic Sitemap
+### Creating a basic Sitemap
 
 ```go
-xml := sitemap.New()
+package main
 
-url := sitemap.NewUrl()
-url.SetLocation("https://domain.com")
-xml.AddEntry(url)
+import sitemap "github.com/mingard/sitemap-format"
 
-out, _ := xml.OutputString()
-fmt.Println(out)
-// Output
-// <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://domain.com</loc><lastmod>2022-11-03T11:56:00.26065Z</lastmod></url></urlset>
+func main() {
+  xml := sitemap.New()
 
+  url := sitemap.NewUrl()
+  url.SetLocation("https://domain.com")
+  xml.AddEntry(url)
+
+  out, _ := xml.OutputString()
+  fmt.Println(out)
+}
+
+// Output: <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://domain.com</loc><lastmod>2022-11-03T11:56:00.26065Z</lastmod></url></urlset>
 ```
