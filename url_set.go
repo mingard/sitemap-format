@@ -4,6 +4,7 @@ package sitemap
 
 import "encoding/xml"
 
+// URLSet is a parent node for <url>'s.
 type URLSet struct {
 	XMLName    xml.Name    `xml:"urlset"`
 	Attributes []*xml.Attr `xml:",attr,omitempty"`
