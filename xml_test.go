@@ -54,7 +54,7 @@ func TestNewSitemapIndex(t *testing.T) {
 func TestPrettyOutput(t *testing.T) {
 	xml := New()
 
-	url := NewUrl()
+	url := NewURL()
 	fixedTime := time.Date(2021, 8, 15, 14, 30, 45, 100, time.UTC)
 	url.SetLastModified(fixedTime)
 	xml.AddEntry(url)
@@ -66,7 +66,7 @@ func TestPrettyOutput(t *testing.T) {
 
 func TestXMLAddDefaultUrl(t *testing.T) {
 	xml := New()
-	url := NewUrl()
+	url := NewURL()
 
 	xml.AddEntry(url)
 
@@ -80,7 +80,7 @@ func TestXMLAddDefaultUrl(t *testing.T) {
 
 func TestXMLAddEntryWithLocation(t *testing.T) {
 	xml := New()
-	url := NewUrl()
+	url := NewURL()
 
 	url.SetLocation("https://domain.com")
 	xml.AddEntry(url)
@@ -109,7 +109,7 @@ func TestSetType(t *testing.T) {
 
 func TestXMLAddEntryWithLastModified(t *testing.T) {
 	xml := New()
-	url := NewUrl()
+	url := NewURL()
 
 	now := time.Now()
 	later := now.Add(3 * time.Hour)

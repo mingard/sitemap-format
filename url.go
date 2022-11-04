@@ -55,7 +55,7 @@ func defaultURL() ChildNode {
 	return url
 }
 
-// NewUrl returns a new instance of the default URL.
-func NewUrl() ChildNode {
+// NewURL returns a new instance of the default URL.
+func NewURL() ChildNode {
 	return defaultURL()
 }

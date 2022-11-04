@@ -1,4 +1,5 @@
 # Sitemap Format
+
 ![Coverage](https://img.shields.io/badge/Coverage-33.6%25-yellow)
 [![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/mingard/sitemap-format)
 [![Go Report Card](https://goreportcard.com/badge/mingard/sitemap-format)](https://goreportcard.com/report/mingard/sitemap-format)
@@ -23,7 +24,7 @@ import sitemap "github.com/mingard/sitemap-format"
 func main() {
   xml := sitemap.New()
 
-  url := sitemap.NewUrl()
+  url := sitemap.NewURL()
   url.SetLocation("https://domain.com")
   xml.AddEntry(url)
 
