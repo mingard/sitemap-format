@@ -15,7 +15,7 @@ type ParentNode interface {
 	AddEntry(sm ChildNode)
 }
 
-// Childnode is the nested node type e.g. <url> or <sitemap>
+// ChildNode is the nested node type e.g. <url> or <sitemap>
 type ChildNode interface {
 	// SetLocation sets the value of the nodes location block.
 	SetLocation(l string)
