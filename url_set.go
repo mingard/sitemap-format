@@ -1,32 +1,34 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
+
 import "encoding/xml"
 
-type UrlSet struct {
+type URLSet struct {
 	XMLName    xml.Name    `xml:"urlset"`
 	Attributes []*xml.Attr `xml:",attr,omitempty"`
-	Url        []ChildNode `xml:"url,omitempty"`
+	URL        []ChildNode `xml:"url,omitempty"`
 }
 
 // SetType sets the urlset xml namespace type.
-func (u *UrlSet) SetType(t *xml.Attr) {
+func (u *URLSet) SetType(t *xml.Attr) {
 	u.Attributes = append(u.Attributes, t)
 }
 
-// AddEntry inserts a URL node into the XML's UrlSet node.
-func (u *UrlSet) AddEntry(url ChildNode) {
-	u.Url = append(u.Url, url)
+// AddEntry inserts a URL node into the XML's URLSet node.
+func (u *URLSet) AddEntry(url ChildNode) {
+	u.URL = append(u.URL, url)
 }
 
-// defaultUrlSet creates a default urlset entity with required values.
-func defaultUrlSet() ParentNode {
-	return &UrlSet{
+// defaultURLSet creates a default urlset entity with required values.
+func defaultURLSet() ParentNode {
+	return &URLSet{
 		Attributes: []*xml.Attr{XMLNSDefault},
-		Url:        make([]ChildNode, 0),
+		URL:        make([]ChildNode, 0),
 	}
 }
 
-// NewUrlSet returns a new instance of the default UrlSet.
-func NewUrlSet() ParentNode {
-	return defaultUrlSet()
+// NewURLSet returns a new instance of the default URLSet.
+func NewURLSet() ParentNode {
+	return defaultURLSet()
 }

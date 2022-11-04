@@ -1,12 +1,14 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
+
 import (
 	"encoding/xml"
 	"time"
 )
 
-// Url is a url block to be nested under UrlSet.
-type Url struct {
+// URL is a url block to be nested under URLSet.
+type URL struct {
 	XMLName          xml.Name  `xml:"url,omitempty"`
 	Location         string    `xml:"loc,omitempty"`
 	ChangeFrequency  string    `xml:"changefreq,omitempty"`
@@ -18,34 +20,34 @@ type Url struct {
 }
 
 // SetLocation sets the url's location parameter
-func (u *Url) SetLocation(l string) {
+func (u *URL) SetLocation(l string) {
 	u.Location = l
 }
 
 // SetLastModified sets the value of the modified date field.
-func (u *Url) SetLastModified(t time.Time) {
+func (u *URL) SetLastModified(t time.Time) {
 	u.LastModifiedDate = t.UTC()
 }
 
-// SetNews sets the news value.
-func (u *Url) SetNews(n *News) {
+// SetNews sets the single news sub-node.
+func (u *URL) SetNews(n *News) {
 	u.News = n
 }
 
-// AddImage adds one or more image block value.
-func (u *Url) AddImage(i ...*Image) {
+// AddImage adds an image sub-node.
+func (u *URL) AddImage(i ...*Image) {
 	u.Images = append(u.Images, i...)
 }
 
-// AddVideo adds one or more video block value.
-func (u *Url) AddVideo(v ...*Video) {
+// AddVideo adds an video sub-node.
+func (u *URL) AddVideo(v ...*Video) {
 	u.Videos = append(u.Videos, v...)
 }
 
-// defaultUrl creates a default url entity with required values.
-func defaultUrl() ChildNode {
+// defaultURL creates a default url entity with required values.
+func defaultURL() ChildNode {
 	now := time.Now()
-	url := &Url{
+	url := &URL{
 		Images: make([]*Image, 0),
 		Videos: make([]*Video, 0),
 	}
@@ -55,5 +57,5 @@ func defaultUrl() ChildNode {
 
 // NewUrl returns a new instance of the default URL.
 func NewUrl() ChildNode {
-	return defaultUrl()
+	return defaultURL()
 }

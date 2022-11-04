@@ -1,5 +1,7 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
+
 import "encoding/xml"
 
 //SitemapIndex is the primary sitemap index node.

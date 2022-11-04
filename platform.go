@@ -1,5 +1,7 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
+
 import "encoding/xml"
 
 // Platform stores allowed and restricted platforms.
@@ -13,7 +15,10 @@ type Platform struct {
 type PlatformName string
 
 const (
-	Web    PlatformName = "web"
+	// Web is the string key for the web platform.
+	Web PlatformName = "web"
+	// Mobile is the string key for the mobile platform.
 	Mobile PlatformName = "mobile"
-	TV     PlatformName = "tv"
+	// TV is the string key for the tv platform.
+	TV PlatformName = "tv"
 )

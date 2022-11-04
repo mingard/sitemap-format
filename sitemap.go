@@ -1,5 +1,7 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
+
 import (
 	"encoding/xml"
 	"time"
@@ -12,7 +14,7 @@ type Sitemap struct {
 	LastModifiedDate time.Time `xml:"lastmod,omitempty"`
 }
 
-// SetLocation sets the sitemap's location parameter
+// SetLocation sets the sitemap's location parameter.
 func (s *Sitemap) SetLocation(l string) {
 	s.Location = l
 }
@@ -22,9 +24,13 @@ func (s *Sitemap) SetLastModified(t time.Time) {
 	s.LastModifiedDate = t.UTC()
 }
 
-// Defaults
-func (s *Sitemap) SetNews(n *News)      {}
+// SetNews is unused here.
+func (s *Sitemap) SetNews(n *News) {}
+
+// AddImage is unused here.
 func (s *Sitemap) AddImage(i ...*Image) {}
+
+// AddVideo is unused here.
 func (s *Sitemap) AddVideo(v ...*Video) {}
 
 // defaultSitemap creates a default sitemap entity with required values.

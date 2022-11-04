@@ -1,5 +1,7 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
+
 import "fmt"
 
 func ExampleNew() {
@@ -10,7 +12,7 @@ func ExampleNew() {
 	// Output: <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>
 }
 
-func ExampleSitemapXML_OutputString() {
+func ExampleXML_OutputString() {
 	xml := New()
 
 	out, _ := xml.OutputString()
@@ -18,7 +20,7 @@ func ExampleSitemapXML_OutputString() {
 	// Output: <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>
 }
 
-func ExampleSitemapXML_OutputPrettyString() {
+func ExampleXML_OutputPrettyString() {
 	xml := New()
 
 	out, _ := xml.OutputPrettyString("", "  ")

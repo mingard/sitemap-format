@@ -1,5 +1,6 @@
 package sitemap
 
+// sitemap formatting with syntactic sugar. © Arthur Mingard 2022
 // See https://developers.google.com/search/docs/crawling-indexing/sitemaps/image-sitemaps
 
 import (
