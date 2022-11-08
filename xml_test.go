@@ -362,8 +362,8 @@ func TestAddVideoUploaderVal(t *testing.T) {
 	xml := New()
 	loc := NewLoc()
 	video := NewVideo()
-	uploader_val := "SomeUser"
-	video.SetUploaderVal(uploader_val)
+	uploadVal := "SomeUser"
+	video.SetUploaderVal(uploadVal)
 	loc.AddVideo(video)
 	xml.Add(loc)
 
@@ -371,9 +371,9 @@ func TestAddVideoUploaderVal(t *testing.T) {
 
 	tag, _ := findOne(out, "//urlset/url/video:video/video:uploader")
 	assert.NotNil(t, video.Uploader, "Should create an uploader")
-	assert.Equal(t, uploader_val, tag.InnerText(), "Should apply value to xml")
-	video.SetUploaderVal(uploader_val)
-	assert.Equal(t, uploader_val, video.Uploader.Value, "Should apply value to struct")
+	assert.Equal(t, uploadVal, tag.InnerText(), "Should apply value to xml")
+	video.SetUploaderVal(uploadVal)
+	assert.Equal(t, uploadVal, video.Uploader.Value, "Should apply value to struct")
 }
 
 func TestAddVideoSetTags(t *testing.T) {
