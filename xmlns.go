@@ -32,7 +32,7 @@ var (
 	}
 	// XMLNSVideo is the XML Namespace type for videos.
 	XMLNSVideo = &xml.Attr{
-		Name:  xml.Name{Local: "xmlns:image"},
+		Name:  xml.Name{Local: "xmlns:video"},
 		Value: "http://www.google.com/schemas/sitemap-video/1.1",
 	}
 )

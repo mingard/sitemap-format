@@ -95,20 +95,20 @@ func (v *Video) SetDescription(d string) *Video {
 	return v
 }
 
-// SetThumbnailLoc sets the video thumbnail location parameter.
-func (v *Video) SetThumbnailLoc(t string) *Video {
+// SetThumbnailLocation sets the video thumbnail location parameter.
+func (v *Video) SetThumbnailLocation(t string) *Video {
 	v.ThumbnailLoc = t
 	return v
 }
 
-// SetContentLoc sets the video content location parameter.
-func (v *Video) SetContentLoc(c string) *Video {
+// SetContentLocation sets the video content location parameter.
+func (v *Video) SetContentLocation(c string) *Video {
 	v.ContentLoc = c
 	return v
 }
 
-// SetPlayerLoc sets the video player location parameter.
-func (v *Video) SetPlayerLoc(p string) *Video {
+// SetPlayerLocation sets the video player location parameter.
+func (v *Video) SetPlayerLocation(p string) *Video {
 	v.PlayerLoc = p
 	return v
 }
