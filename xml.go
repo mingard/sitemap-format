@@ -23,6 +23,7 @@ type XML struct {
 	outputIndent string
 }
 
+// applyXMLNS adds all required XML namespace values.
 func (x *XML) applyXMLNS() {
 	var hasNews bool
 	var hasImage bool
@@ -50,7 +51,7 @@ func (x *XML) applyXMLNS() {
 	}
 }
 
-// AddEntry inserts an entry into the XML's first parent node.
+// Add inserts an entry into the XML's first parent node.
 func (x *XML) Add(l *Location) {
 	if x.sitemapIndex {
 		l.isSitemapIndex()
@@ -117,7 +118,6 @@ func defaultXML() *XML {
 
 // NewSitemapIndex creates a new sitemap with a sitemap_index child node.
 func NewSitemapIndex() *XML {
-	fmt.Println("NewSitemapIndex")
 	out := New()
 	out.sitemapIndex = true
 	out.isSitemapIndex()

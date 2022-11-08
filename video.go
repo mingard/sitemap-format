@@ -91,7 +91,10 @@ func (v *Video) SetTitle(t string) *Video {
 // SetDescription sets the video extensions description parameter.
 func (v *Video) SetDescription(d string) *Video {
 	// Limit to the maximum length of a description.
-	v.Description = d[:MaxDescriptionLength]
+	v.Description = d
+	if len(v.Description) > MaxDescriptionLength {
+		v.Description = d[:MaxDescriptionLength]
+	}
 	return v
 }
 
@@ -219,16 +222,16 @@ func (v *Video) SubNotRequired() *Video {
 	return v
 }
 
-// SetUploader sets the uploader
-func (v *Video) SetUploader(u *Uploader) *Video {
-	v.FamilyFriendly = No
+// setUploader sets the uploader
+func (v *Video) setUploader(u *Uploader) *Video {
+	v.Uploader = u
 	return v
 }
 
 // SetUploaderInfo sets the uploader
 func (v *Video) SetUploaderInfo(i string) *Video {
 	if v.Uploader == nil {
-		return v.SetUploader(&Uploader{
+		return v.setUploader(&Uploader{
 			Info: i,
 		})
 	}
@@ -239,7 +242,7 @@ func (v *Video) SetUploaderInfo(i string) *Video {
 // SetUploaderVal sets the uploader value
 func (v *Video) SetUploaderVal(val string) *Video {
 	if v.Uploader == nil {
-		return v.SetUploader(&Uploader{
+		return v.setUploader(&Uploader{
 			Value: val,
 		})
 	}

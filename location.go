@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// URL is a url block to be nested under URLSet.
+// Location is a location block to be nested under the parent node.
 type Location struct {
 	XMLName          xml.Name  `xml:"url,omitempty"`
 	Location         string    `xml:"loc,omitempty"`
@@ -19,11 +19,12 @@ type Location struct {
 	Videos           []*Video  `xml:"video:video,omitempty"`
 }
 
+// isSitemapIndex sets the XML node name to 'sitemap'
 func (l *Location) isSitemapIndex() {
 	l.XMLName.Local = "sitemap"
 }
 
-// SetLocation sets the url's location parameter
+// SetLocation sets the url's location parameter.
 func (l *Location) SetLocation(loc string) {
 	l.Location = loc
 }

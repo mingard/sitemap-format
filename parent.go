@@ -13,6 +13,7 @@ type parent struct {
 	Locations  []*Location `xml:",omitempty"`
 }
 
+// isSitemapIndex sets the XML name type to 'sitemapindex'
 func (p *parent) isSitemapIndex() {
 	p.XMLName.Local = "sitemapindex"
 }
@@ -22,7 +23,7 @@ func (p *parent) addXMLNS(t *xml.Attr) {
 	p.Attributes = append(p.Attributes, t)
 }
 
-// Add inserts a node into the XML's parent node.
+// add inserts a node into the XML's parent node.
 func (p *parent) add(l *Location) {
 	p.Locations = append(p.Locations, l)
 }
@@ -36,7 +37,7 @@ func defaultParent() *parent {
 	}
 }
 
-// NewIndex returns a new instance of the default SitemapIndex.
+// newParent returns a new instance of the default parent.
 func newParent() *parent {
 	return defaultParent()
 }
