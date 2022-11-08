@@ -11,7 +11,6 @@ import (
 // News stores news entry data.
 type News struct {
 	XMLName         xml.Name     `xml:"news:news"`
-	Name            string       `xml:"news:name"`
 	Publication     *Publication `xml:"news:publication"`
 	PublicationDate time.Time    `xml:"news:publication_date"`
 	Title           string       `xml:"news:title"`
@@ -23,9 +22,9 @@ func (n *News) SetTitle(t string) *News {
 	return n
 }
 
-// SetName sets the news extensions name parameter.
+// SetName sets the news extensions publication name parameter.
 func (n *News) SetName(na string) *News {
-	n.Name = na
+	n.Publication.Name = na
 	return n
 }
 
@@ -45,7 +44,7 @@ func (n *News) SetLanguage(l Lang) *News {
 // Publication is the news publication sub-component to News.
 type Publication struct {
 	XMLName      xml.Name `xml:"news:publication"`
-	NewsName     string   `xml:"news:name,omitempty"`
+	Name         string   `xml:"news:name,omitempty"`
 	NewsLanguage Lang     `xml:"news:language,omitempty"`
 }
 
