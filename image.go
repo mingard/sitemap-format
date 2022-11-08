@@ -14,8 +14,8 @@ type Image struct {
 	Loc string `xml:"image:loc"`
 }
 
-// SetLoc sets the image location.
-func (i *Image) SetLoc(l string) *Image {
+// SetLocation sets the image location.
+func (i *Image) SetLocation(l string) *Image {
 	i.Loc = l
 	return i
 }

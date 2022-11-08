@@ -6,7 +6,7 @@ import "encoding/xml"
 
 // Platform stores allowed and restricted platforms.
 type Platform struct {
-	XMLName      xml.Name  `xml:"video:restriction,omitempty"`
+	XMLName      xml.Name  `xml:"video:platform,omitempty"`
 	Relationship *xml.Attr `xml:",attr,omitempty"`
 	Value        string    `xml:",chardata"`
 }

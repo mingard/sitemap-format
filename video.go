@@ -91,24 +91,27 @@ func (v *Video) SetTitle(t string) *Video {
 // SetDescription sets the video extensions description parameter.
 func (v *Video) SetDescription(d string) *Video {
 	// Limit to the maximum length of a description.
-	v.Description = d[:MaxDescriptionLength]
+	v.Description = d
+	if len(v.Description) > MaxDescriptionLength {
+		v.Description = d[:MaxDescriptionLength]
+	}
 	return v
 }
 
-// SetThumbnailLoc sets the video thumbnail location parameter.
-func (v *Video) SetThumbnailLoc(t string) *Video {
+// SetThumbnailLocation sets the video thumbnail location parameter.
+func (v *Video) SetThumbnailLocation(t string) *Video {
 	v.ThumbnailLoc = t
 	return v
 }
 
-// SetContentLoc sets the video content location parameter.
-func (v *Video) SetContentLoc(c string) *Video {
+// SetContentLocation sets the video content location parameter.
+func (v *Video) SetContentLocation(c string) *Video {
 	v.ContentLoc = c
 	return v
 }
 
-// SetPlayerLoc sets the video player location parameter.
-func (v *Video) SetPlayerLoc(p string) *Video {
+// SetPlayerLocation sets the video player location parameter.
+func (v *Video) SetPlayerLocation(p string) *Video {
 	v.PlayerLoc = p
 	return v
 }
@@ -219,16 +222,16 @@ func (v *Video) SubNotRequired() *Video {
 	return v
 }
 
-// SetUploader sets the uploader
-func (v *Video) SetUploader(u *Uploader) *Video {
-	v.FamilyFriendly = No
+// setUploader sets the uploader
+func (v *Video) setUploader(u *Uploader) *Video {
+	v.Uploader = u
 	return v
 }
 
 // SetUploaderInfo sets the uploader
 func (v *Video) SetUploaderInfo(i string) *Video {
 	if v.Uploader == nil {
-		return v.SetUploader(&Uploader{
+		return v.setUploader(&Uploader{
 			Info: i,
 		})
 	}
@@ -239,7 +242,7 @@ func (v *Video) SetUploaderInfo(i string) *Video {
 // SetUploaderVal sets the uploader value
 func (v *Video) SetUploaderVal(val string) *Video {
 	if v.Uploader == nil {
-		return v.SetUploader(&Uploader{
+		return v.setUploader(&Uploader{
 			Value: val,
 		})
 	}

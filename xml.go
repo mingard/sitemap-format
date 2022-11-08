@@ -16,35 +16,61 @@ const (
 
 // XML is the top level XML node for the sitemap
 type XML struct {
-	ParentNodes  []ParentNode `xml:",omitempty"`
+	*parent      `xml:",omitempty"`
+	sitemapIndex bool
 	pretty       bool
 	outputPrefix string
 	outputIndent string
 }
 
-// AddEntry inserts an entry into the XML's first parent node.
-func (x *XML) AddEntry(e ChildNode) {
-	x.ParentNodes[0].AddEntry(e)
+// applyXMLNS adds all required XML namespace values.
+func (x *XML) applyXMLNS() {
+	var hasNews bool
+	var hasImage bool
+	var hasVideo bool
+
+	for _, l := range x.Locations {
+		if l.News != nil {
+			hasNews = true
+		}
+		if len(l.Images) > 0 {
+			hasImage = true
+		}
+		if len(l.Videos) > 0 {
+			hasVideo = true
+		}
+	}
+	if hasNews {
+		x.addXMLNS(XMLNSNews)
+	}
+	if hasImage {
+		x.addXMLNS(XMLNSImage)
+	}
+	if hasVideo {
+		x.addXMLNS(XMLNSVideo)
+	}
 }
 
-// SetType sets the parent node's xmlns type attribute.
-func (x *XML) SetType(t *xml.Attr) {
-	for _, parent := range x.ParentNodes {
-		parent.SetType(t)
+// Add inserts an entry into the XML's first parent node.
+func (x *XML) Add(l *Location) {
+	if x.sitemapIndex {
+		l.isSitemapIndex()
 	}
+	x.parent.add(l)
 }
 
 // Output returns the output value as bytes
 func (x *XML) Output() ([]byte, error) {
+	x.applyXMLNS()
 	out := []byte(x.headerString())
 	var err error
 
 	var marshalledXML []byte
 
 	if x.pretty {
-		marshalledXML, err = xml.MarshalIndent(x.ParentNodes, x.outputPrefix, x.outputIndent)
+		marshalledXML, err = xml.MarshalIndent(x.parent, x.outputPrefix, x.outputIndent)
 	} else {
-		marshalledXML, err = xml.Marshal(x.ParentNodes)
+		marshalledXML, err = xml.Marshal(x.parent)
 	}
 
 	if err == nil {
@@ -85,7 +111,6 @@ func (x *XML) headerString() string {
 // defaultXML creates a default xml entity with required values.
 func defaultXML() *XML {
 	return &XML{
-		ParentNodes:  make([]ParentNode, 0),
 		outputPrefix: defaultOutputPrefix,
 		outputIndent: defaultOutputIndent,
 	}
@@ -93,16 +118,15 @@ func defaultXML() *XML {
 
 // NewSitemapIndex creates a new sitemap with a sitemap_index child node.
 func NewSitemapIndex() *XML {
-	sitemapIndex := NewIndex()
-	out := defaultXML()
-	out.ParentNodes = append(out.ParentNodes, sitemapIndex)
+	out := New()
+	out.sitemapIndex = true
+	out.isSitemapIndex()
 	return out
 }
 
 // New returns a new instance of the default XML.
 func New() *XML {
-	urlSet := NewURLSet()
 	out := defaultXML()
-	out.ParentNodes = append(out.ParentNodes, urlSet)
+	out.parent = newParent()
 	return out
 }
