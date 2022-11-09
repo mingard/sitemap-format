@@ -2,45 +2,33 @@ package sitemap
 
 import (
 	"encoding/xml"
-	"fmt"
 	"time"
 )
 
 const (
-	shortFormat   string = "YYYY-MM-DD"
-	defaultFormat string = "YYYY-MM-DDThh:mmTZD"
+	shortFormat string = "2006-01-02"
+	fullFormat  string = "2006-01-02T15:04:05-07:00"
 )
 
 // customDate is a time.Time value with custom XML unmarshal method.
 type customDate struct {
 	time.Time
-	shortFormat bool
+	format string
 }
 
-// useShortFormat sets the date format to short.
-func (c *customDate) useShortFormat() {
-	c.shortFormat = true
+// MarshalXML is a customer marshal method for customDate.
+func (c *customDate) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	t := time.Time(c.Time)
+	v := t.Format(c.format)
+	return e.EncodeElement(v, start)
 }
 
-// UnmarshalXML is a customer unmarshal method for customDate.
-func (c *customDate) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var v string
+// Date returns a new short format date.
+func Date(t time.Time) customDate {
+	return customDate{t, shortFormat}
+}
 
-	format := defaultFormat
-	if c.shortFormat {
-		format = shortFormat
-	}
-
-	fmt.Println("ASD", format)
-
-	err := d.DecodeElement(&v, &start)
-	if err != nil {
-		return err
-	}
-	parse, err := time.Parse(format, v)
-	if err != nil {
-		return err
-	}
-	*c = customDate{parse, c.shortFormat}
-	return nil
+// DateFull returns a long format date.
+func DateFull(t time.Time) customDate {
+	return customDate{t, fullFormat}
 }

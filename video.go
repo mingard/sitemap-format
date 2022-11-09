@@ -6,7 +6,6 @@ package sitemap
 import (
 	"encoding/xml"
 	"strings"
-	"time"
 )
 
 const (
@@ -126,8 +125,8 @@ func (v *Video) SetDuration(d int) *Video {
 }
 
 // SetExpirationDate sets the video ExpirationDate parameter.
-func (v *Video) SetExpirationDate(t time.Time) *Video {
-	v.ExpirationDate.Time = t.UTC()
+func (v *Video) SetExpirationDate(c customDate) *Video {
+	v.ExpirationDate = c
 	return v
 }
 
@@ -146,8 +145,8 @@ func (v *Video) SetViewCount(vc int) *Video {
 }
 
 // SetPublicationDate sets the video extensions PublicationDate parameter.
-func (v *Video) SetPublicationDate(t time.Time) *Video {
-	v.PublicationDate.Time = t.UTC()
+func (v *Video) SetPublicationDate(c customDate) *Video {
+	v.PublicationDate = c
 	return v
 }
 

@@ -30,8 +30,8 @@ func (l *Location) SetLocation(loc string) {
 }
 
 // SetLastModified sets the value of the modified date field.
-func (l *Location) SetLastModified(t time.Time) {
-	l.LastModifiedDate.Time = t.UTC()
+func (l *Location) SetLastModified(c customDate) {
+	l.LastModifiedDate = c
 }
 
 // SetNews sets the single news sub-node.
@@ -57,7 +57,7 @@ func defaultLoc() *Location {
 		Images:  make([]*Image, 0),
 		Videos:  make([]*Video, 0),
 	}
-	url.SetLastModified(now)
+	url.SetLastModified(Date(now))
 	return url
 }
 

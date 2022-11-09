@@ -29,8 +29,8 @@ func (n *News) SetName(na string) *News {
 }
 
 // SetPublicationDate sets the news extensions PublicationDate parameter.
-func (n *News) SetPublicationDate(t time.Time) *News {
-	n.PublicationDate.Time = t.UTC()
+func (n *News) SetPublicationDate(c customDate) *News {
+	n.PublicationDate = c
 	return n
 }
 
@@ -56,7 +56,7 @@ func defaultNews() *News {
 			NewsLanguage: LangDefault,
 		},
 	}
-	return n.SetPublicationDate(now)
+	return n.SetPublicationDate(Date(now))
 }
 
 // NewNews returns a new instance of the default News extension.
