@@ -101,6 +101,20 @@ func TestXMLAddDefaultUrl(t *testing.T) {
 	assert.NotNil(t, lastModTag, "Should have default last modified")
 }
 
+func TestXMLShortFormat(t *testing.T) {
+	xml := New()
+	loc := NewLoc()
+	xml.Add(loc)
+	xml.SetDateFormatShort()
+	out, _ := xml.OutputString()
+
+	tag, _ := findOne(out, "//urlset/url/loc")
+	assert.Nil(t, tag, "Should have urlset, nested url nodes but without location")
+	fmt.Println(out)
+	lastModTag, _ := findOne(out, "//urlset/url/asdasd")
+	assert.NotNil(t, lastModTag, "Should have default last modified")
+}
+
 func TestXMLAddEntryWithLocation(t *testing.T) {
 	xml := New()
 	loc := NewLoc()

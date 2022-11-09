@@ -16,11 +16,12 @@ const (
 
 // XML is the top level XML node for the sitemap
 type XML struct {
-	*parent      `xml:",omitempty"`
-	sitemapIndex bool
-	pretty       bool
-	outputPrefix string
-	outputIndent string
+	*parent          `xml:",omitempty"`
+	sitemapIndex     bool
+	shortFormatDates bool
+	pretty           bool
+	outputPrefix     string
+	outputIndent     string
 }
 
 // applyXMLNS adds all required XML namespace values.
@@ -51,6 +52,20 @@ func (x *XML) applyXMLNS() {
 	}
 }
 
+// applyShortFormatting applies date formatting to date fields.
+func (x *XML) applyShortFormatting() {
+	for _, l := range x.Locations {
+		l.LastModifiedDate.useShortFormat()
+		if l.News != nil {
+			l.News.PublicationDate.useShortFormat()
+		}
+		for _, v := range l.Videos {
+			v.ExpirationDate.useShortFormat()
+			v.PublicationDate.useShortFormat()
+		}
+	}
+}
+
 // Add inserts an entry into the XML's first parent node.
 func (x *XML) Add(l *Location) {
 	if x.sitemapIndex {
@@ -62,6 +77,9 @@ func (x *XML) Add(l *Location) {
 // Output returns the output value as bytes
 func (x *XML) Output() ([]byte, error) {
 	x.applyXMLNS()
+	if x.shortFormatDates {
+		x.applyShortFormatting()
+	}
 	out := []byte(x.headerString())
 	var err error
 
@@ -97,6 +115,11 @@ func (x *XML) OutputString() (string, error) {
 func (x *XML) OutputPrettyString(prefix, indent string) (string, error) {
 	x.PrettyFormat(prefix, indent)
 	return x.OutputString()
+}
+
+// SetDateFormatShort sets the date format parameter to short.
+func (x *XML) SetDateFormatShort() {
+	x.shortFormatDates = true
 }
 
 // headerString outputs the XML header string

@@ -9,14 +9,14 @@ import (
 
 // Location is a location block to be nested under the parent node.
 type Location struct {
-	XMLName          xml.Name  `xml:"url,omitempty"`
-	Location         string    `xml:"loc,omitempty"`
-	ChangeFrequency  string    `xml:"changefreq,omitempty"`
-	Priority         string    `xml:"priority,omitempty"`
-	LastModifiedDate time.Time `xml:"lastmod,omitempty"`
-	News             *News     `xml:"news:news,omitempty"`
-	Images           []*Image  `xml:"image:image,omitempty"`
-	Videos           []*Video  `xml:"video:video,omitempty"`
+	XMLName          xml.Name   `xml:"url,omitempty"`
+	Location         string     `xml:"loc,omitempty"`
+	ChangeFrequency  string     `xml:"changefreq,omitempty"`
+	Priority         string     `xml:"priority,omitempty"`
+	LastModifiedDate customDate `xml:"lastmod,omitempty"`
+	News             *News      `xml:"news:news,omitempty"`
+	Images           []*Image   `xml:"image:image,omitempty"`
+	Videos           []*Video   `xml:"video:video,omitempty"`
 }
 
 // isSitemapIndex sets the XML node name to 'sitemap'
@@ -31,7 +31,7 @@ func (l *Location) SetLocation(loc string) {
 
 // SetLastModified sets the value of the modified date field.
 func (l *Location) SetLastModified(t time.Time) {
-	l.LastModifiedDate = t.UTC()
+	l.LastModifiedDate.Time = t.UTC()
 }
 
 // SetNews sets the single news sub-node.

@@ -12,7 +12,7 @@ import (
 type News struct {
 	XMLName         xml.Name     `xml:"news:news"`
 	Publication     *Publication `xml:"news:publication"`
-	PublicationDate time.Time    `xml:"news:publication_date"`
+	PublicationDate customDate   `xml:"news:publication_date"`
 	Title           string       `xml:"news:title"`
 }
 
@@ -30,7 +30,7 @@ func (n *News) SetName(na string) *News {
 
 // SetPublicationDate sets the news extensions PublicationDate parameter.
 func (n *News) SetPublicationDate(t time.Time) *News {
-	n.PublicationDate = t.UTC()
+	n.PublicationDate.Time = t.UTC()
 	return n
 }
 

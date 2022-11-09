@@ -61,14 +61,14 @@ type Video struct {
 	// Duration value must be from {{DurationMin}} to {{DurationMax}} inclusive.
 	Duration int `xml:"video:duration,omitempty"`
 	// ExpirationDate format either YYYY-MM-DD or YYYY-MM-DDThh:mm:ss+TZD
-	ExpirationDate time.Time `xml:"video:expiration_date,omitempty"`
+	ExpirationDate customDate `xml:"video:expiration_date,omitempty"`
 
 	// Optional
 
 	// Rating values are float numbers in the range {{RatingLow}} (low) to {{RatingHigh}} (high), inclusive.
-	Rating          float32   `xml:"video:rating,omitempty"`
-	ViewCount       int       `xml:"video:view_count,omitempty"`
-	PublicationDate time.Time `xml:"video:publication_date,omitempty"`
+	Rating          float32    `xml:"video:rating,omitempty"`
+	ViewCount       int        `xml:"video:view_count,omitempty"`
+	PublicationDate customDate `xml:"video:publication_date,omitempty"`
 	// FamilyFriendly whether the video is available with SafeSearch.
 	FamilyFriendly BoolStr        `xml:"video:family_friendly,omitempty"`
 	Restrictions   []*Restriction `xml:"video:restriction,omitempty"`
@@ -127,7 +127,7 @@ func (v *Video) SetDuration(d int) *Video {
 
 // SetExpirationDate sets the video ExpirationDate parameter.
 func (v *Video) SetExpirationDate(t time.Time) *Video {
-	v.ExpirationDate = t.UTC()
+	v.ExpirationDate.Time = t.UTC()
 	return v
 }
 
@@ -147,7 +147,7 @@ func (v *Video) SetViewCount(vc int) *Video {
 
 // SetPublicationDate sets the video extensions PublicationDate parameter.
 func (v *Video) SetPublicationDate(t time.Time) *Video {
-	v.PublicationDate = t.UTC()
+	v.PublicationDate.Time = t.UTC()
 	return v
 }
 
