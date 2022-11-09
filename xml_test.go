@@ -14,10 +14,10 @@ import (
 const (
 	testDefaultXML             string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`
 	testDefaultSitemapIndexXML string = `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>`
-	testDefaultPrettyXML       string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\nXXXXX<url>\nXXXXXXXXXX<lastmod>2021-08-15T14:30:45.0000001Z</lastmod>\nXXXXX</url>\n</urlset>"
-	testFullNewsXML            string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"><url><lastmod>2021-08-15T14:30:45.0000001Z</lastmod><news:news><news:publication><news:name>SOMENAME</news:name><news:language>en</news:language></news:publication><news:publication_date>2021-08-15T14:30:45.0000001Z</news:publication_date><news:title>TITLE</news:title></news:news></url></urlset>`
-	testFullImageXML           string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"><url><loc>https://somedomain.com/article</loc><lastmod>2021-08-15T14:30:45.0000001Z</lastmod><image:image><image:loc>https://somedomain.com/image.jpg</image:loc></image:image></url></urlset>`
-	testFullVideoXML           string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"><url><loc>https://somedomain.com/article</loc><lastmod>2021-08-15T14:30:45.0000001Z</lastmod><video:video><video:title>Some title</video:title><video:thumbnail_loc>https://somedomain.com/thumb.jpg</video:thumbnail_loc><video:content_loc>https://somedomain.com/video.mp4</video:content_loc><video:player_loc>https://somedomain.com/player</video:player_loc><video:duration>100</video:duration><video:expiration_date>2021-08-15T14:30:45.0000001Z</video:expiration_date><video:rating>2</video:rating><video:view_count>100</video:view_count><video:publication_date>2021-08-15T14:30:45.0000001Z</video:publication_date></video:video></url></urlset>`
+	testDefaultPrettyXML       string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\nXXXXX<url>\nXXXXXXXXXX<lastmod>2021-08-15</lastmod>\nXXXXX</url>\n</urlset>"
+	testFullNewsXML            string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"><url><lastmod>2021-08-15</lastmod><news:news><news:publication><news:name>SOMENAME</news:name><news:language>en</news:language></news:publication><news:publication_date>2021-08-15</news:publication_date><news:title>TITLE</news:title></news:news></url></urlset>`
+	testFullImageXML           string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"><url><loc>https://somedomain.com/article</loc><lastmod>2021-08-15</lastmod><image:image><image:loc>https://somedomain.com/image.jpg</image:loc></image:image></url></urlset>`
+	testFullVideoXML           string = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"><url><loc>https://somedomain.com/article</loc><lastmod>2021-08-15</lastmod><video:video><video:title>Some title</video:title><video:thumbnail_loc>https://somedomain.com/thumb.jpg</video:thumbnail_loc><video:content_loc>https://somedomain.com/video.mp4</video:content_loc><video:player_loc>https://somedomain.com/player</video:player_loc><video:duration>100</video:duration><video:expiration_date>2021-08-15</video:expiration_date><video:rating>2</video:rating><video:view_count>100</video:view_count><video:publication_date>2021-08-15</video:publication_date></video:video></url></urlset>`
 )
 
 var fixedTime = time.Date(2021, 8, 15, 14, 30, 45, 100, time.UTC)
@@ -81,7 +81,7 @@ func TestPrettyOutput(t *testing.T) {
 	xml := New()
 
 	loc := NewLoc()
-	loc.SetLastModified(fixedTime)
+	loc.SetLastModified(Date(fixedTime))
 	xml.Add(loc)
 
 	out, _ := xml.OutputPrettyString("", "XXXXX")
@@ -136,11 +136,11 @@ func TestSetNews(t *testing.T) {
 func TestSetNewsValues(t *testing.T) {
 	xml := New()
 	loc := NewLoc()
-	loc.SetLastModified(fixedTime)
+	loc.SetLastModified(Date(fixedTime))
 	news := NewNews()
 	news.SetTitle("TITLE")
 	news.SetName("SOMENAME")
-	news.SetPublicationDate(fixedTime)
+	news.SetPublicationDate(Date(fixedTime))
 	news.SetLanguage(LanguageEN)
 	loc.SetNews(news)
 	xml.Add(loc)
@@ -166,7 +166,7 @@ func TestAddImageValues(t *testing.T) {
 	xml := New()
 	loc := NewLoc()
 	loc.SetLocation("https://somedomain.com/article")
-	loc.SetLastModified(fixedTime)
+	loc.SetLastModified(Date(fixedTime))
 
 	image := NewImage()
 	image.SetLocation("https://somedomain.com/image.jpg")
@@ -193,7 +193,7 @@ func TestAddVideoValues(t *testing.T) {
 	xml := New()
 	loc := NewLoc()
 	loc.SetLocation("https://somedomain.com/article")
-	loc.SetLastModified(fixedTime)
+	loc.SetLastModified(Date(fixedTime))
 
 	video := NewVideo()
 	video.SetTitle("Some title")
@@ -201,10 +201,10 @@ func TestAddVideoValues(t *testing.T) {
 	video.SetContentLocation("https://somedomain.com/video.mp4")
 	video.SetPlayerLocation("https://somedomain.com/player")
 	video.SetDuration(100)
-	video.SetExpirationDate(fixedTime)
+	video.SetExpirationDate(Date(fixedTime))
 	video.SetRating(2)
 	video.SetViewCount(100)
-	video.SetPublicationDate(fixedTime)
+	video.SetPublicationDate(Date(fixedTime))
 	loc.AddVideo(video)
 	xml.Add(loc)
 
@@ -398,7 +398,7 @@ func TestXMLAddEntryWithLastModified(t *testing.T) {
 
 	now := time.Now()
 	later := now.Add(3 * time.Hour)
-	loc.SetLastModified(later)
+	loc.SetLastModified(Date(later))
 	xml.Add(loc)
 
 	out, _ := xml.OutputString()
@@ -407,5 +407,38 @@ func TestXMLAddEntryWithLastModified(t *testing.T) {
 	assert.True(t, tag != nil, "Should have lastmod set")
 
 	nodeTime, _ := time.Parse(time.RFC3339, tag.InnerText())
-	assert.Equal(t, nodeTime, later.UTC(), "Should match input timestamp")
+	laterFormat, _ := time.Parse(shortFormat, later.String())
+	assert.Equal(t, nodeTime, laterFormat, "Should match input timestamp")
+}
+
+func TestDate(t *testing.T) {
+	xml := New()
+	loc := NewLoc()
+
+	now := time.Now()
+	loc.SetLastModified(Date(now))
+	xml.Add(loc)
+
+	out, _ := xml.OutputString()
+
+	tag, _ := findOne(out, "//urlset/url/lastmod")
+	assert.True(t, tag != nil, "Should have lastmod set")
+
+	assert.Equal(t, tag.InnerText(), now.Format(shortFormat), "Should format a short date")
+}
+
+func TestDateFull(t *testing.T) {
+	xml := New()
+	loc := NewLoc()
+
+	now := time.Now()
+	loc.SetLastModified(DateFull(now))
+	xml.Add(loc)
+
+	out, _ := xml.OutputString()
+
+	tag, _ := findOne(out, "//urlset/url/lastmod")
+	assert.True(t, tag != nil, "Should have lastmod set")
+
+	assert.Equal(t, tag.InnerText(), now.Format(fullFormat), "Should format a long date")
 }

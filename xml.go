@@ -62,6 +62,7 @@ func (x *XML) Add(l *Location) {
 // Output returns the output value as bytes
 func (x *XML) Output() ([]byte, error) {
 	x.applyXMLNS()
+
 	out := []byte(x.headerString())
 	var err error
 
