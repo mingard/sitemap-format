@@ -442,3 +442,14 @@ func TestDateFull(t *testing.T) {
 
 	assert.Equal(t, tag.InnerText(), now.Format(fullFormat), "Should format a long date")
 }
+
+func TestStrToLang(t *testing.T) {
+	pass := StrToLang("zu")
+	fmt.Println(pass)
+	assert.Equal(t, pass, LanguageZU, "Should return an existing matching language")
+
+	fail := StrToLang("notacountry")
+	fmt.Println(fail)
+
+	assert.Equal(t, fail, LangDefault, "Should fallback to default language")
+}
