@@ -565,8 +565,8 @@ var langMap = map[string]Lang{
 	"zu": LanguageZU,
 }
 
-// StrToLang returns either a valid language or a default.
-func StrToLang(s string) Lang {
+// Language returns either a valid language or a default.
+func Language(s string) Lang {
 	if langMap[s] != "" {
 		return langMap[s]
 	}

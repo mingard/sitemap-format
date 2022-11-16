@@ -444,11 +444,11 @@ func TestDateFull(t *testing.T) {
 }
 
 func TestStrToLang(t *testing.T) {
-	pass := StrToLang("zu")
+	pass := Language("zu")
 	fmt.Println(pass)
 	assert.Equal(t, pass, LanguageZU, "Should return an existing matching language")
 
-	fail := StrToLang("notacountry")
+	fail := Language("notacountry")
 	fmt.Println(fail)
 
 	assert.Equal(t, fail, LangDefault, "Should fallback to default language")
